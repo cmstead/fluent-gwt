@@ -1,0 +1,31 @@
+{
+  "name": "fluent-gwt",
+  "version": "1.0.0",
+  "description": "A native JS fluent Given/When/Then library for improving BDD test structure",
+  "main": "index.js",
+  "scripts": {
+    "test": "node ./node_modules/mocha/bin/mocha tests/**/*.test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cmstead/fluent-gwt.git"
+  },
+  "keywords": [
+    "testing",
+    "bdd",
+    "given when then",
+    "gwt",
+    "xp",
+    "tdd"
+  ],
+  "author": "Chris Stead",
+  "license": "MPL-2.0",
+  "bugs": {
+    "url": "https://github.com/cmstead/fluent-gwt/issues"
+  },
+  "homepage": "https://github.com/cmstead/fluent-gwt#readme",
+  "dependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^7.0.1"
+  }
+}
