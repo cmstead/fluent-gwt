@@ -72,9 +72,24 @@
         }
     }
 
+    function fromCallback(callbackStyleFunction) {
+        return function (...args) {
+            return new Promise(function(resolve, reject){
+                callbackStyleFunction(...args, function (error, data) {
+                    if(error) {
+                        reject(error);
+                    } else {
+                        resolve(data);
+                    }
+                });
+            });
+        }
+    }
+
     return {
+        arrange: given,
+        fromCallback: fromCallback,
         given: given,
-        arrange: given
     };
 
 });

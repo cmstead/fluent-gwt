@@ -98,4 +98,20 @@ describe('Fluent GWT', function () {
                 (actualResult) => assert.equal(actualResult, 'async string')
             )
     });
+
+    it('supports callback-style behaviors when a user needs to', function () {
+        return gwt
+            .arrange(
+                'a promise-returning function is used',
+                gwt.fromCallback(callback => callback(null, 'callback string'))
+            )
+            .act(
+                'an asynchronous when is used',
+                (givenResult) => Promise.resolve(givenResult)
+            )
+            .assert(
+                'the async string should pass through',
+                (actualResult) => assert.equal(actualResult, 'callback string')
+            )
+    });
 });
