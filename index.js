@@ -18,7 +18,7 @@
             }
         },
 
-        when: function (description, whenFunction) {
+        when: function (description, whenFunction = () => null) {
             this.whenDescription = description;
             this.whenFunction = whenFunction;
 
@@ -30,7 +30,7 @@
             };
         },
 
-        then: function (description, thenFunction) {
+        then: function (description, thenFunction = () => null) {
             this.thenDescription = description;
             this.thenFunction = thenFunction;
 
@@ -62,7 +62,7 @@
         }
     };
 
-    function given(description, givenFunction) {
+    function given(description, givenFunction = () => null) {
         const testCase = new TestCase(description, givenFunction);
         const whenHandler = (...args) => testCase.when(...args);
 
