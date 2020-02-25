@@ -1,6 +1,6 @@
 {
   "name": "fluent-gwt",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A native JS fluent Given/When/Then library for improving BDD test structure",
   "main": "index.js",
   "scripts": {
