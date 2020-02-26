@@ -1,8 +1,20 @@
 const { assert } = require('chai');
+const sinon = require('sinon');
 
-const gwt = require('../index');
+const gwtFactory = require('../src/gwt');
 
 describe('Fluent GWT', function () {
+
+    let gwt;
+    let loggerFake;
+
+    beforeEach(function () {
+        loggerFake = {
+            log: sinon.stub()
+        };
+
+        gwt = gwtFactory(loggerFake).configure({});
+    });
 
     it('tests a behavior when a user defines a simple, synchronous test', function () {
         return gwt
@@ -20,7 +32,7 @@ describe('Fluent GWT', function () {
             );
     });
 
-    it('provides GWT output when a test fails', function () {
+    it('bubbles up error when a test fails', function () {
         return gwt
             .given(
                 'User event is described and has an initial state',
@@ -40,14 +52,7 @@ describe('Fluent GWT', function () {
                 assert.isFalse(true);
             })
             .catch(function (error) {
-                const failureMessage = 'Test failed:\n\n' +
-                    'Given: User event is described and has an initial state\n' +
-                    'When: Behavior is called, capture outcome\n' +
-                    'Then: Outcome should match expectation\n' +
-                    '\n' +
-                    'Error message: This test failed because reasons'
-
-                assert.equal(error.message, failureMessage);
+                assert.equal(error.message, 'This test failed because reasons');
             });
     });
 
@@ -113,5 +118,214 @@ describe('Fluent GWT', function () {
                 'the async string should pass through',
                 (actualResult) => assert.equal(actualResult, 'callback string')
             )
+    });
+
+    it('Displays failing GWT step when a test fails, regardless of mode', function () {
+        const errorMessage = 'Oh no!';
+
+        return gwt
+            .given(
+                'GWT is configured in verbose mode',
+                () => gwtFactory(loggerFake)
+                    .configure({
+                        verbose: false
+                    })
+            )
+            .when(
+                'a passing test is executed',
+                (gwtUnderTest) => gwtUnderTest
+                    .given('test given', () => { throw new Error(errorMessage) })
+                    .when('test when', () => null)
+                    .then('test then', () => null)
+
+                    .catch(() => Promise.resolve(true))
+            )
+            .then(
+                'logger should be called with GWT information and okay state',
+                () => {
+                    assert.equal(loggerFake.log.args[0][0], 'Failed - Given: test given');
+                }
+            )
+
+            .catch((error) => {
+                if (error.message.includes(errorMessage)) {
+                    return Promise.resolve(true);
+                } else {
+                    return Promise.reject(error);
+                }
+            });
+    });
+
+
+    describe('verbose mode', function () {
+        it('calls logger with all GWT messaging in verbose mode for a passing test', function () {
+            return gwt
+                .given(
+                    'GWT is configured in verbose mode',
+                    () => gwtFactory(loggerFake)
+                        .configure({
+                            verbose: true
+                        })
+                )
+                .when(
+                    'a passing test is executed',
+                    (gwtUnderTest) => gwtUnderTest
+                        .given('test given', () => null)
+                        .when('test when', () => null)
+                        .then('test then', () => null)
+                )
+                .then(
+                    'logger should be called with GWT information and okay state',
+                    () => {
+                        assert.equal(loggerFake.log.args[0][0], 'OK - Given: test given');
+                        assert.equal(loggerFake.log.args[1][0], 'OK - When: test when');
+                        assert.equal(loggerFake.log.args[2][0], 'OK - Then: test then');
+                    }
+                );
+        });
+
+        it('calls logger with failed status message for given when an error is thrown', function () {
+            const errorMessage = 'Oh no!';
+
+            return gwt
+                .given(
+                    'GWT is configured in verbose mode',
+                    () => gwtFactory(loggerFake)
+                        .configure({
+                            verbose: true
+                        })
+                )
+                .when(
+                    'a passing test is executed',
+                    (gwtUnderTest) => gwtUnderTest
+                        .given('test given', () => { throw new Error(errorMessage) })
+                        .when('test when', () => null)
+                        .then('test then', () => null)
+
+                        .catch(() => Promise.resolve(true))
+                )
+                .then(
+                    'logger should be called with GWT information and okay state',
+                    () => {
+                        assert.equal(loggerFake.log.args[0][0], 'Failed - Given: test given');
+                    }
+                )
+
+                .catch((error) => {
+                    if (error.message.includes(errorMessage)) {
+                        return Promise.resolve(true);
+                    } else {
+                        return Promise.reject(error);
+                    }
+                });
+        });
+
+        it('calls logger with failed status message for "when" when an error is thrown', function () {
+            const errorMessage = 'Oh no!';
+
+            return gwt
+                .given(
+                    'GWT is configured in verbose mode',
+                    () => gwtFactory(loggerFake)
+                        .configure({
+                            verbose: true
+                        })
+                )
+                .when(
+                    'a passing test is executed',
+                    (gwtUnderTest) => gwtUnderTest
+                        .given('test given', () => null)
+                        .when('test when', () => { throw new Error(errorMessage) })
+                        .then('test then', () => null)
+
+                        .catch(() => Promise.resolve(true))
+                )
+                .then(
+                    'logger should be called with GWT information and okay state',
+                    () => {
+                        assert.equal(loggerFake.log.args[1][0], 'Failed - When: test when');
+                    }
+                )
+
+                .catch((error) => {
+                    if (error.message.includes(errorMessage)) {
+                        return Promise.resolve(true);
+                    } else {
+                        return Promise.reject(error);
+                    }
+                });
+        });
+
+        it('calls logger with failed status message for "then" when an error is thrown', function () {
+            const errorMessage = 'Oh no!';
+
+            return gwt
+                .given(
+                    'GWT is configured in verbose mode',
+                    () => gwtFactory(loggerFake)
+                        .configure({
+                            verbose: true
+                        })
+                )
+                .when(
+                    'a passing test is executed',
+                    (gwtUnderTest) => gwtUnderTest
+                        .given('test given', () => null)
+                        .when('test when', () => null)
+                        .then('test then', () => { throw new Error(errorMessage) })
+
+                        .catch(() => Promise.resolve(true))
+                )
+                .then(
+                    'logger should be called with GWT information and okay state',
+                    () => {
+                        assert.equal(loggerFake.log.args[2][0], 'Failed - Then: test then');
+                    }
+                )
+
+                .catch((error) => {
+                    if (error.message.includes(errorMessage)) {
+                        return Promise.resolve(true);
+                    } else {
+                        return Promise.reject(error);
+                    }
+                });
+        });
+
+        it('calls logger with failed status message for "then" when an error is thrown', function () {
+            const errorMessage = 'Oh no!';
+
+            return gwt
+                .given(
+                    'GWT is configured in verbose mode',
+                    () => gwtFactory(loggerFake)
+                        .configure({
+                            verbose: true
+                        })
+                )
+                .when(
+                    'a passing test is executed',
+                    (gwtUnderTest) => gwtUnderTest
+                        .given('test given', () => null)
+                        .when('test when', () => null)
+                        .then('test then', () => { throw new Error(errorMessage) })
+
+                        .catch(() => Promise.resolve(true))
+                )
+                .then(
+                    'logger should be called with GWT information and okay state',
+                    () => {
+                        assert.equal(loggerFake.log.args[2][0], 'Failed - Then: test then');
+                    }
+                )
+
+                .catch((error) => {
+                    if (error.message.includes(errorMessage)) {
+                        return Promise.resolve(true);
+                    } else {
+                        return Promise.reject(error);
+                    }
+                });
+        });
     });
 });
