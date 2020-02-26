@@ -39,7 +39,7 @@ function gwtFactory(logger) {
 
         given: function (description, givenFunction) {
             this.givenFunction = this.wrapInPromise(
-                'Given: ' + description,
+                'Given/Arrange: ' + description,
                 givenFunction
             );
 
@@ -52,7 +52,7 @@ function gwtFactory(logger) {
         when: function (description, whenFunction = () => null) {
             this.whenDescription = description;
             this.whenFunction = this.wrapInPromise(
-                'When: ' + description,
+                'When/Act: ' + description,
                 whenFunction
             );
 
@@ -67,7 +67,7 @@ function gwtFactory(logger) {
         then: function (description, thenFunction = () => null) {
             this.thenDescription = description;
             this.thenFunction = this.wrapInPromise(
-                'Then: ' + description,
+                'Then/Assert: ' + description,
                 thenFunction
             );
 

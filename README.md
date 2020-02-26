@@ -1,8 +1,12 @@
 # Fluent-GWT #
 
-Fluent-GWT is the answer to limiting the amount of build tooling needed in order to get well-structured tests created with a Given/When/Then or Arrange/Act/Assert style format.
+Fluent-GWT is a native-Javascript Given/When/Then library which integrates into node test flows. The API helps codify the G/W/T or Arrange/Act/Assert workflow in your tests, making it easier to understand which part of the test is accomplishing what work.
 
-Though Jasmine-Given, Mocha-Given, and Mocha-GWT exist, they all require, at the very least, a coffeescript compiler added into the toolchain.  This makes them hard to integrate into current testing solutions and unfriendly if users are already feeling tooling fatigue.
+Fluent-GWT provides extra helping information when tests fail, by logging which section of the test generated the error. This reduces time spent searching for the misbehaving code.
+
+**Why Another GWT Library?**
+
+Though Jasmine-Given, Mocha-Given, and Mocha-GWT exist, they all require, at the very least, a parser/interpreter and a new language in the toolchain.  This makes them hard to integrate into current testing solutions and unfriendly if users are already feeling tooling fatigue. Fluent-GWT aims to simplify this problem and improve testing for people who aren't comfortable with the extra build tooling.
 
 ## Setup ##
 
@@ -12,12 +16,15 @@ Install with npm:
 
 ## Usage ##
 
-Fluent-GWT can be used by requiring it into your test file (node) or adding it to your test runner and interfacing directly from the browser (client).
+Fluent-GWT can be used by requiring it into your test file (node) -- client test are currently unsupported.
 
 Requiring in node looks like this:
 
 ```javascript
-const gwt = require('fluent-gwt');
+const gwt = require('fluent-gwt')
+    .configure({
+        verbose: true // default is false
+    });
 ```
 
 Below is an example of a test using Fluent-GWT (used in Mocha):
