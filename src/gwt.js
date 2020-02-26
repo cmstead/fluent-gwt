@@ -7,7 +7,7 @@ function gwtFactory(logger) {
         logMessage: function (error, description) {
             if (this.verbose || Boolean(error)) {
                 const status = !error ? 'OK' : 'Failed';
-                logger.log(status + ' - ' + description);
+                logger.log('GWT: ' + status + ' - ' + description);
             }
         },
 

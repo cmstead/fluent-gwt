@@ -143,7 +143,7 @@ describe('Fluent GWT', function () {
             .then(
                 'logger should be called with GWT information and okay state',
                 () => {
-                    assert.equal(loggerFake.log.args[0][0], 'Failed - Given/Arrange: test given');
+                    assert.equal(loggerFake.log.args[0][0], 'GWT: Failed - Given/Arrange: test given');
                 }
             )
 
@@ -177,9 +177,9 @@ describe('Fluent GWT', function () {
                 .then(
                     'logger should be called with GWT information and okay state',
                     () => {
-                        assert.equal(loggerFake.log.args[0][0], 'OK - Given/Arrange: test given');
-                        assert.equal(loggerFake.log.args[1][0], 'OK - When/Act: test when');
-                        assert.equal(loggerFake.log.args[2][0], 'OK - Then/Assert: test then');
+                        assert.equal(loggerFake.log.args[0][0], 'GWT: OK - Given/Arrange: test given');
+                        assert.equal(loggerFake.log.args[1][0], 'GWT: OK - When/Act: test when');
+                        assert.equal(loggerFake.log.args[2][0], 'GWT: OK - Then/Assert: test then');
                     }
                 );
         });
@@ -207,7 +207,7 @@ describe('Fluent GWT', function () {
                 .then(
                     'logger should be called with GWT information and okay state',
                     () => {
-                        assert.equal(loggerFake.log.args[0][0], 'Failed - Given/Arrange: test given');
+                        assert.equal(loggerFake.log.args[0][0], 'GWT: Failed - Given/Arrange: test given');
                     }
                 )
 
@@ -243,7 +243,7 @@ describe('Fluent GWT', function () {
                 .then(
                     'logger should be called with GWT information and okay state',
                     () => {
-                        assert.equal(loggerFake.log.args[1][0], 'Failed - When/Act: test when');
+                        assert.equal(loggerFake.log.args[1][0], 'GWT: Failed - When/Act: test when');
                     }
                 )
 
@@ -279,7 +279,7 @@ describe('Fluent GWT', function () {
                 .then(
                     'logger should be called with GWT information and okay state',
                     () => {
-                        assert.equal(loggerFake.log.args[2][0], 'Failed - Then/Assert: test then');
+                        assert.equal(loggerFake.log.args[2][0], 'GWT: Failed - Then/Assert: test then');
                     }
                 )
 
@@ -315,7 +315,7 @@ describe('Fluent GWT', function () {
                 .then(
                     'logger should be called with GWT information and okay state',
                     () => {
-                        assert.equal(loggerFake.log.args[2][0], 'Failed - Then/Assert: test then');
+                        assert.equal(loggerFake.log.args[2][0], 'GWT: Failed - Then/Assert: test then');
                     }
                 )
 
