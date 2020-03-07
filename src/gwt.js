@@ -37,7 +37,7 @@ function gwtFactory(logger) {
             })
         },
 
-        given: function (description, givenFunction) {
+        given: function (description, givenFunction = () => null) {
             this.givenFunction = this.wrapInPromise(
                 'Given/Arrange: ' + description,
                 givenFunction
