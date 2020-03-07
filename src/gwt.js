@@ -64,7 +64,12 @@ function gwtFactory(logger) {
             };
         },
 
-        then: function (description, thenFunction = () => null) {
+        defaultThen: function() {
+            const errorMessage = 'GWT: Unable to complete test -- then is missing an assertion handler';
+            throw new Error(errorMessage);
+        },
+
+        then: function (description, thenFunction = this.defaultThen) {
             this.thenDescription = description;
             this.thenFunction = this.wrapInPromise(
                 'Then/Assert: ' + description,

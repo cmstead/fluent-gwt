@@ -156,6 +156,30 @@ describe('Fluent GWT', function () {
             });
     });
 
+    it('fails test at "then" stage when no handler is provided', function () {
+        const errorMessage = 'GWT: Unable to complete test -- then is missing an assertion handler';
+
+        return gwt
+            .given(
+                'no given handler provided'
+            )
+            .when(
+                'no when handler provided'
+            )
+            .then(
+                'no then handler provided'
+            )
+
+            .then(() => Promise.reject(new Error('Failed to fail')))
+            .catch((error) => {
+                if (error.message.includes(errorMessage)) {
+                    return Promise.resolve(true);
+                } else {
+                    return Promise.reject(error);
+                }
+            });
+    });
+
 
     describe('verbose mode', function () {
         it('calls logger with all GWT messaging in verbose mode for a passing test', function () {
